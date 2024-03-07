@@ -1,0 +1,136 @@
+/* Pricing.css */
+.pricing-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.pricing-switcher {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.fieldset {
+  display: inline-block;
+  position: relative;
+  padding-left: 30px;
+  margin-right: 15px;
+}
+
+.fieldset input[type="radio"] {
+  display: none;
+}
+
+.fieldset label {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.switch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 30px;
+  background-color: #cccccc;
+  border-radius: 15px;
+  transition: all 0.3s ease; /* Added transition */
+}
+
+.switch:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  background-color: #fff;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease; /* Added transition */
+}
+
+
+
+.pricing-list {
+  list-style: none;
+  padding: 0;
+}
+
+.pricing-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.pricing-wrapper li {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.pricing-header {
+  background-color: #f9f9f9;
+  text-align: center;
+  padding: 20px;
+}
+
+.pricing-header h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.currency {
+  font-size: 20px;
+}
+
+.duration {
+  font-size: 18px;
+  vertical-align: super;
+}
+
+.pricing-body {
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+}
+
+.pricing-features li {
+  margin-bottom: 15px;
+}
+
+.pricing-features li em {
+  font-weight: bold;
+}
+
+.pricing-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.select {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.select:hover {
+  background-color: #0056b3;
+}
+
+ul {
+  list-style: none; /* Remove bullet points */
+}
+
