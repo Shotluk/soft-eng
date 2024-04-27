@@ -14,6 +14,7 @@ function MyNavbar() {
             <Nav.Link as={Link} to="/login">Login</Nav.Link>
             <Nav.Link as={Link} to="/scheduling">Scheduling</Nav.Link>
             <Nav.Link as={Link} to="/payment">Pricing</Nav.Link>
+            <Nav.Link as={Link} to="reviews">Reviews</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

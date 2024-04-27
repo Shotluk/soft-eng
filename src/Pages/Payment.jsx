@@ -26,8 +26,8 @@ export default function Payment() {
                     <h1 className="text-center mb-4">Payment</h1>
                     <p className="text-center mb-4">AED 20</p>
                     <Form onSubmit={handleSubmit}>
-                    <h3 className="text-center mb-4">Select Payment Method</h3>
-                    
+                        <h3 className="text-center mb-4">Select Payment Method</h3>
+
                         <Row className="justify-content-md-center">
                             <Col xs={12} md={6}>
                                 <Form.Group as={Row}>
@@ -81,13 +81,13 @@ export default function Payment() {
                                                 <Form.Control type="text" placeholder="Enter CVV" value={cvv} onChange={(e) => setCvv(e.target.value)} />
                                             </Form.Group>
                                         </Form>
+                                        <Button variant="primary" type="submit" className="mt-3">
+                                            Submit
+                                        </Button>
                                     </Col>
                                 </Row>}
                             </>
                         )}
-                        <Button variant="primary" type="submit" className="mt-3">
-                            Submit
-                        </Button>
                     </Form>
                 </Col>
             </Row>
