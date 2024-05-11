@@ -14,6 +14,7 @@ export default function Register() {
   const [code, setCode] = useState('');
   const [inputCode, setInputCode] = useState(''); 
   const [isCodeSent, setIsCodeSent] = useState(false);
+  const [isMember, setIsMember] = useState(false);
 
   const navigate = useNavigate();
 
@@ -74,7 +75,9 @@ export default function Register() {
       await addDoc(usersCollection, {
         name: username,
         email: email,
-        password: password
+        password: password,
+        isMember: isMember,
+        points: 0,
       });
 
       navigate('/login')
@@ -125,6 +128,9 @@ export default function Register() {
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+              <Form.Check type="checkbox" label="Do you want to be a member?" checked={isMember} onChange={(e) => setIsMember(e.target.checked)} />
             </Form.Group>
 
             <Button variant="primary" type="submit">

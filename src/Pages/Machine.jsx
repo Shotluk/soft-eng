@@ -10,17 +10,6 @@ import { collection, getDocs, where, query, doc, getDoc, setDoc } from 'firebase
 import { v4 as uuidv4 } from 'uuid';
 
 export default function MachinePage() {
-    // Generate time slots from 6 AM to 12 AM
-    const generateTimeSlots = () => {
-        const timeSlots = [];
-        for (let hour = 8; hour <= 22; hour++) {
-            const time = `${hour < 10 ? '0' + hour : hour}:${'00'} ${hour < 12 ? 'AM' : 'PM'}`;
-            timeSlots.push(time);
-        }
-        return timeSlots;
-    };
-
-    const timeSlots = generateTimeSlots();
 
     const navigate = useNavigate();
 
