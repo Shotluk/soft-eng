@@ -57,45 +57,45 @@ export default function BookingPage() {
     };
 
 
-    return (
+        return (
 
-        <Container>
-            <Row className="justify-content-md-center">
-                <Col xs={12} md={6}>
-                    <h2 className="text-center mb-4">Please select the day</h2>
-                    <Form.Select aria-label="Day select" onChange={handleDayChange}>
-                        <option>Select a day</option>
-                        {[...Array(5)].map((_, i) => {
-                            const date = new Date();
-                            date.setDate(date.getDate() + i);
-                            const dateString = date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                            return <option key={i} value={dateString}>{dateString}</option>
-                        })}
-                    </Form.Select>
-                    {selectedDay && (
-                        <>
-                            <h2 className="text-center mb-4">Please select the time slot</h2>
-                            <Form onSubmit={handleSubmit}>
-                                {timeSlots.map((timeSlot, index) => (
-                                    <Form.Check
-                                        key={index}
-                                        type="checkbox"
-                                        id={`timeSlot-${index}`}
-                                        label={timeSlot}
-                                        value={timeSlot}
-                                        onChange={handleTimeSlotChange}
-                                        checked={selectedTimeSlots.includes(timeSlot)}
-                                    />
-                                ))}
-                                <Button type="submit" className="mt-3">Submit</Button>
-                            </Form>
-                        </>
-                    )}
-                </Col>
-            </Row>
-            <ToastContainer />
-        </Container>
-    );
+            <Container>
+                <Row className="justify-content-md-center">
+                    <Col xs={12} md={6}>
+                        <h2 className="text-center mb-4">Please select the day</h2>
+                        <Form.Select aria-label="Day select" onChange={handleDayChange}>
+                            <option>Select a day</option>
+                            {[...Array(5)].map((_, i) => {
+                                const date = new Date();
+                                date.setDate(date.getDate() + i);
+                                const dateString = date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                                return <option key={i} value={dateString}>{dateString}</option>
+                            })}
+                        </Form.Select>
+                        {selectedDay && (
+                            <>
+                                <h2 className="text-center mb-4">Please select the time slot</h2>
+                                <Form onSubmit={handleSubmit}>
+                                    {timeSlots.map((timeSlot, index) => (
+                                        <Form.Check
+                                            key={index}
+                                            type="checkbox"
+                                            id={`timeSlot-${index}`}
+                                            label={timeSlot}
+                                            value={timeSlot}
+                                            onChange={handleTimeSlotChange}
+                                            checked={selectedTimeSlots.includes(timeSlot)}
+                                        />
+                                    ))}
+                                    <Button type="submit" className="mt-3">Submit</Button>
+                                </Form>
+                            </>
+                        )}
+                    </Col>
+                </Row>
+                <ToastContainer />
+            </Container>
+        );
 }
 
 const generateTimeSlots = () => {
