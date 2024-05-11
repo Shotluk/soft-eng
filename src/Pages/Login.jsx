@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import handleSubmit from '../firebase_setup/handleSubmit'; 
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmitForm = (event) => {
     event.preventDefault();
-    // Handle login logic here
+    // Call handleSubmit function with user details
+    handleSubmit({ email, password });
   };
 
   return (
@@ -15,7 +17,7 @@ export default function Login() {
       <h1 className="mb-4">Login</h1>
       <Row className="justify-content-md-center">
         <Col xs={12} md={6}>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmitForm}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
