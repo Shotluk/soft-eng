@@ -24,6 +24,7 @@ export default function Register() {
 
       emailjs.send('service_y7joqpw', 'template_qx3hsjf', 
       {
+        email: email,
         name: username,
         code: code,
       }, 
