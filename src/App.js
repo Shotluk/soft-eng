@@ -4,6 +4,7 @@ import Login from './Pages/Login';
 import Payment from './Pages/Payment';
 import Reviews from './Pages/Reviews';
 import Admin from './Pages/Admin';
+import BookingPage from './Pages/Booking';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -22,6 +23,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/scheduling" element={<SchedulingPage />} />
+          <Route path="/booking" element={<BookingPage />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>

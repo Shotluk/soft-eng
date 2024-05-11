@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const mock_reviews = [
     { title: 'Washing Machine', body: 'It works nicely', rating: 4 },
@@ -11,6 +12,16 @@ export default function Review() {
     const [reviewBody, setReviewBody] = useState('');
     const [rating, setRating] = useState(0);
     const [reviews, setReviews] = useState(mock_reviews);
+
+    const machines = [1, 2, 3, 4, 5, 6];
+  
+    const name = localStorage.getItem('name');
+  
+    if (!name) {
+      return <p>
+        Please <Link to="/login">login</Link> to make a review.
+      </p>
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
