@@ -18,7 +18,7 @@ function MyNavbar() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand as={Link} to="/">BlackWash Ultra</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">BlackWashUltra</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
           <Nav className="me-auto">
