@@ -4,6 +4,8 @@ import { collection, addDoc } from 'firebase/firestore';
 import { firestore } from '../firebase_setup/firebase'; // Adjust the path accordingly
 import emailjs from '@emailjs/browser';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -17,6 +19,26 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!username || !email || !password) {
+      toast.error('Please fill in all fields!');
+      return;
+    }
+    if (password.length < 8 || password.length > 20) {
+      toast.error('Password must be between 8 and 20 characters!');
+      return;
+    }
+    if (!/\d/.test(password)) {
+      toast.error('Password must contain at least one number!');
+      return;
+    }
+    if (!/[!@#$%^&*]/.test(password)) {
+      toast.error('Password must contain at least one special character!');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error('Invalid email!');
+      return;
+    }
 
     try {
       const code = Math.floor(100000 + Math.random() * 900000);
@@ -111,6 +133,7 @@ export default function Register() {
           </Form>
         </Col>
       </Row>
+      <ToastContainer />
     </Container>
   );
 }
