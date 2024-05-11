@@ -23,24 +23,26 @@ function MyNavbar() {
         <Navbar.Collapse id="navbarNav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
-            <Nav.Link as={Link} to="/login">Login</Nav.Link>
             <Nav.Link as={Link} to="/scheduling">Scheduling</Nav.Link>
             <Nav.Link as={Link} to="reviews">Reviews</Nav.Link>
           </Nav>
 
-        {
-            name &&
-            <Nav className="ml-auto">
-                <NavDropdown title={<RiAccountCircleFill  />} id="basic-nav-dropdown">
-                    <NavDropdown.Item disabled>{name}</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
-                </NavDropdown>
-            </Nav>
-        }
+
+          <Nav className="ml-auto">
+            {name ?
+              (<NavDropdown title={<RiAccountCircleFill fontSize={30} />} id="basic-nav-dropdown">
+                <NavDropdown.Item disabled>{name}</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+              </NavDropdown>)
+              : (<Nav.Link as={Link} to="/login">Login</Nav.Link>)
+            }
+          </Nav>
+
+
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 }
-  export default MyNavbar;
+export default MyNavbar;
