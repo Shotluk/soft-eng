@@ -95,7 +95,7 @@ export default function MachinePage() {
         <Container>
             <Row className="justify-content-md-center">
                 <Col xs={12} md={6}>
-                    <h2 className="text-center mb-4">Please select the time slot</h2>
+                    <h2 className="text-center mb-4">Please select the machine</h2>
                     <Form onSubmit={handleSubmit}>
                         {availableMachine.map((machine, index) => (
                             <Form.Check

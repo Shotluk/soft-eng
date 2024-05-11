@@ -10,8 +10,16 @@ export default function Home() {
                 Join us today and enjoy a seamless washing experience.
             </p>
             <div className="d-flex justify-content-center">
-                <Button variant="primary" href="/login" style={{ marginRight: '20px' }}>Login</Button>
-                <Button variant="primary" href="/register">Sign Up</Button>
+                {localStorage.getItem('name') ? 
+                    <Button variant="primary" href="/scheduling">Schedule a Wash</Button>
+                :
+                (
+                    <>
+                    <Button variant="primary" href="/login" style={{ marginRight: '20px' }}>Login</Button>
+                    <Button variant="primary" href="/register">Sign Up</Button>
+                    </>
+                )
+                }
             </div>
         </Container>
     )

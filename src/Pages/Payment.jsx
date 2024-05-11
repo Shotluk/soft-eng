@@ -6,6 +6,7 @@ import { collection, getDocs, where, query, doc, getDoc, setDoc } from 'firebase
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
 
 export default function Payment() {
     const [cardNumber, setCardNumber] = useState('');
@@ -17,6 +18,8 @@ export default function Payment() {
     const [data, setData] = useState([]);
     const [users, setUsers] = useState([]);
     const [dindex, setDindex] = useState('');
+    const [authId, setAuthId] = useState('');
+    const [userAuthData, setUserAuthData] = useState({});
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -44,7 +47,21 @@ export default function Payment() {
             setUsers(docSnap.data().users);
             setDindex(index);
         }
+        const getUserData = async () => {
+            const usersCollection = collection(firestore, 'user');
+            const q = query(usersCollection, where('name', '==', localStorage.getItem('name')));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                querySnapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    setAuthId(doc.id);
+                    setUserAuthData(userData);
+                });
+            }
+        }
         getData();
+        getUserData();
     }, [docRef, uid]);
 
 
@@ -87,11 +104,41 @@ export default function Payment() {
         if (paymentMethod === 'coin') {
             data[dindex].time = new Date().toLocaleString();
             data[dindex].paymentMethod = 'coin';
-        } else {
+        } if (paymentMethod === 'loyalty') {
+            if (userAuthData.points < price) {
+                toast.error('Not enough loyalty points');
+                return;
+            }
+            data[dindex].time = new Date().toLocaleString();
+            data[dindex].paymentMethod = 'loyalty';
+            data[dindex].reciept = "Points " + price;
+            const newPoints = userAuthData.points - price;
+            const usersCollection = collection(firestore, 'user');
+            await setDoc(doc(usersCollection, authId), { points: newPoints }, { merge: true });
+        }
+        else {
             data[dindex].time = new Date().toLocaleString();
             data[dindex].paymentMethod = 'card';
             data[dindex].reciept = "AED " + price;
+            const newPoints = userAuthData.points + 1 * price/10;
+            const usersCollection = collection(firestore, 'user');
+            await setDoc(doc(usersCollection, authId), { points: newPoints }, { merge: true });
         }
+        emailjs.send('service_y7joqpw', 'template_j4hgyi7', 
+            {
+              name: userAuthData.name,
+              email: userAuthData.email,
+              day: data[dindex].day,
+              time: generateTimeSlots()[Number(data[dindex].slot1)],
+              machine: data[dindex].machine.toString() === "0" ? "Washing Machine" : "Drying Machine",
+            }, 
+            {
+              publicKey: 'Eb6-EiLTv9S5aeaU8',
+            })
+            .then(
+              () => {console.log('SUCCESS!');},
+              (error) => {console.log('FAILED...', error);},
+            );
         console.log(data);
         await setDoc(docRef, { data: data, users: users });
         navigate('/home');
@@ -107,28 +154,40 @@ export default function Payment() {
                         <h3 className="text-center mb-4">Select Payment Method</h3>
 
                         <Row className="justify-content-md-center">
-                            <Col xs={12} md={6}>
+                            <Col xs={12}>
                                 <Form.Group>
-                                    <Col sm={6}>
-                                        <Form.Check
-                                            type="radio"
-                                            label="Card"
-                                            name="paymentMethod"
-                                            value="card"
-                                            checked={paymentMethod === 'card'}
-                                            onChange={(e) => setPaymentMethod(e.target.value)}
-                                        />
-                                    </Col>
-                                    <Col sm={6}>
-                                        <Form.Check
-                                            type="radio"
-                                            label="Coin"
-                                            name="paymentMethod"
-                                            value="coin"
-                                            checked={paymentMethod === 'coin'}
-                                            onChange={(e) => setPaymentMethod(e.target.value)}
-                                        />
-                                    </Col>
+                                    <Row>
+                                        <Col sm={4}>
+                                            <Form.Check
+                                                type="radio"
+                                                label="Card"
+                                                name="paymentMethod"
+                                                value="card"
+                                                checked={paymentMethod === 'card'}
+                                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                            />
+                                        </Col>
+                                        <Col sm={4}>
+                                            <Form.Check
+                                                type="radio"
+                                                label="Coin"
+                                                name="paymentMethod"
+                                                value="coin"
+                                                checked={paymentMethod === 'coin'}
+                                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                            />
+                                        </Col>
+                                        <Col sm={4}>
+                                            <Form.Check
+                                                type="radio"
+                                                label="Loyalty Points"
+                                                name="paymentMethod"
+                                                value="loyalty"
+                                                checked={paymentMethod === 'loyalty'}
+                                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                            />
+                                        </Col>
+                                    </Row>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -161,6 +220,15 @@ export default function Payment() {
                                 </Row>
                             </>
                         )}
+
+                        {paymentMethod === 'loyalty' && (
+                            <>
+                            <h3 className="text-center mb-4">Loyalty Points</h3>
+                            <p className="text-center mb-4">You have {userAuthData.points} loyalty points</p>
+
+                            </>
+                        )}
+
                         <Button variant="primary" type="submit" className="mt-3">
                             Submit
                         </Button>
@@ -185,3 +253,12 @@ const luhn = (cardNumber) => {
     }
     return (sum % 10 === 0);
 }
+
+const generateTimeSlots = () => {
+    const timeSlots = [];
+    for (let hour = 8; hour <= 22; hour++) {
+        const time = `${hour < 10 ? '0' + hour : hour}:${'00'} ${hour < 12 ? 'AM' : 'PM'}`;
+        timeSlots.push(time);
+    }
+    return timeSlots;
+};
