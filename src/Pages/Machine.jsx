@@ -17,8 +17,7 @@ export default function MachinePage() {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
     const day = searchParams.get('day');
-    const slot1 = searchParams.get('slot1');
-    const slot2 = searchParams.get('slot2');
+    const passedSlots = searchParams.get('slots').split(',');
 
     const [availableMachine, setAvailableMachine] = useState([]);
 
@@ -31,9 +30,18 @@ export default function MachinePage() {
                 if (docSnap.exists()) {
                     const data = docSnap.data().data;
                     for (const value of data) {
-                        if (value.slot1 !== slot1 && value.slot1 !== slot2 &&
-                            value.slot2 !== slot1 && value.slot2 !== slot2) {
-                            ams.push(i)
+                        // check if any of the slots overlap
+                        const slots = value.slots.split(',');
+
+                        let overlap = false;
+                        for (const slot of slots) {
+                            if (passedSlots.includes(slot)) {
+                                overlap = true;
+                                break;
+                            }
+                            if (!overlap) {
+                                ams.push(i)
+                            }
                         }
                     }
                 } else {
@@ -45,7 +53,7 @@ export default function MachinePage() {
             setAvailableMachine(ams);
         }
         getData();
-    }, [id, day, slot1, slot2]);
+    }, [id, day, passedSlots]);
 
     const [selectedMachine, setSelectedMachine] = useState(-1);
     const handleMachineChange = (event) => {
@@ -68,10 +76,28 @@ export default function MachinePage() {
             data = docSnap.data().data;
             users = docSnap.data().users;
         }
+        for (const value of data) {
+            const slots = value.slots.split(',');
+
+            let overlap = false;
+            for (const slot of slots) {
+                if (passedSlots.includes(slot)) {
+                    overlap = true;
+                    break;
+                }
+                if (overlap) {
+                    toast.error('The machine has been booked by someone else');
+                    setTimeout(() => {
+                        window.location.search = '';
+                        window.location.pathname = "/scheduling";
+                    }, 1000);
+                    return
+                }
+            }
+        }
         let uid = uuidv4();
         data.push({
-            slot1: slot1,
-            slot2: slot2,
+            slots: passedSlots.join(','),
             user: localStorage.getItem('name'),
             day: day,
             machine: id,

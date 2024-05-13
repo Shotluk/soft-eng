@@ -37,11 +37,7 @@ export default function Payment() {
             if (d[index].paymentMethod) {
                 setPrice(0);
             } else {
-                if (d[index].slot2 === null) {
-                    setPrice(10);
-                } else {
-                    setPrice(20);
-                }
+                setPrice(10 * d[index].slots.split(',').length);
             }
             setData(d);
             setUsers(docSnap.data().users);
@@ -129,7 +125,7 @@ export default function Payment() {
               name: userAuthData.name,
               email: userAuthData.email,
               day: data[dindex].day,
-              time: generateTimeSlots()[Number(data[dindex].slot1)],
+              time: generateTimeSlots()[Number(data[dindex].slots.split(',')[0])],
               machine: data[dindex].machine.toString() === "0" ? "Washing Machine" : "Drying Machine",
             }, 
             {

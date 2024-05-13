@@ -19,17 +19,13 @@ export default function BookingPage() {
 
     const handleTimeSlotChange = (event) => {
         const selectedTimeSlot = event.target.value;
-        if (selectedTimeSlots.length < 2 || selectedTimeSlots.includes(selectedTimeSlot)) {
-            setSelectedTimeSlots(prevState => {
-                if (prevState.includes(selectedTimeSlot)) {
-                    return prevState.filter(timeSlot => timeSlot !== selectedTimeSlot);
-                } else {
-                    return [...prevState, selectedTimeSlot];
-                }
-            });
-        } else {
-            toast.error('You can select at most 2 time slots.');
-        }
+        setSelectedTimeSlots(prevState => {
+            if (prevState.includes(selectedTimeSlot)) {
+                return prevState.filter(timeSlot => timeSlot !== selectedTimeSlot);
+            } else {
+                return [...prevState, selectedTimeSlot];
+            }
+        });
     };
 
     const navigate = useNavigate();
@@ -44,16 +40,23 @@ export default function BookingPage() {
             toast.error('Please select at least one time slot.');
             return;
         }
+
+        const slots = selectedTimeSlots.map(timeSlot => timeSlots.indexOf(timeSlot));
+        slots.sort((a, b) => a - b);
+        // ensure 3 consecutive slots are not selected
+        for (let i = 0; i < slots.length - 1; i++) {
+            if (slots[i + 1] - slots[i] === 1 && slots[i + 2] - slots[i + 1] === 1) {
+                toast.error('You cannot select 3 consecutive time slots.');
+                return;
+            }
+        }
+
         const regex = /\b\d{1,2}\b/;
         const day = selectedDay.match(regex)[0];
 
-        const slot1 = timeSlots.indexOf(selectedTimeSlots[0]);
-        if (selectedTimeSlots.length === 1) {
-            navigate(`/machine?id=${id}&day=${day}&slot1=${slot1}`);
-            return;
-        }
-        const slot2 = timeSlots.indexOf(selectedTimeSlots[1]);
-        navigate(`/machine?id=${id}&day=${day}&slot1=${slot1}&slot2=${slot2}`);
+        // make slots string passable in url bar
+        const slots_string = slots.join(',');
+        navigate(`/machine?id=${id}&day=${day}&slots=${slots_string}`);
     };
 
 
