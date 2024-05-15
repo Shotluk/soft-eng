@@ -37,7 +37,11 @@ export default function Payment() {
             if (d[index].paymentMethod) {
                 setPrice(0);
             } else {
-                setPrice(10 * d[index].slots.split(',').length);
+                let pr = 10 * d[index].slots.split(',').length
+                if(localStorage.getItem('name') === 'Hussain')
+                    setPrice(pr * 0.8);
+                else
+                    setPrice(pr);
             }
             setData(d);
             setUsers(docSnap.data().users);

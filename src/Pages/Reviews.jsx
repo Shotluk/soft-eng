@@ -15,7 +15,9 @@ export default function Review() {
     const [bookings, setBookings] = useState([]); // State variable for bookings
 
     useEffect(() => {
-        
+        const name = localStorage.getItem('name');
+
+        if (!name)  return;
             fetchReviews();
             fetchBookings();
         
